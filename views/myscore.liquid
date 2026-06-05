@@ -1,0 +1,6 @@
+{% include 'partials/head.liquid' %}
+<ul>
+  {% for golfer in golfers %}
+    <li>{{ golfer.name }}</li>
+  {% endfor %}
+</ul>

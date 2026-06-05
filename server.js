@@ -25,6 +25,24 @@ app.get('/', async function (request, response) {
     response.render('home.liquid', {
       golfers: allGolfers,
       totalGolfers: allGolfers.length,
+    })
+  } catch (error) {
+    console.error(error)
+    response.status(500).send('Er ging iets mis bij het ophalen van de golfers.')
+  }
+})
+
+app.get('/myscore', async function (request, response) {
+  try {
+    const params = new URLSearchParams()
+
+    const golferResponse = await fetch(`${golfersUrl}?${params.toString()}`)
+    const golferResponseJSON = await golferResponse.json()
+    const allGolfers = golferResponseJSON.data ?? []
+
+    response.render('myscore.liquid', {
+      golfers: allGolfers,
+      totalGolfers: allGolfers.length,
       roundsUrl,
       handicapHistoryUrl,
       milestonesUrl,
