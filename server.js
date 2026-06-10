@@ -4,11 +4,16 @@ import { Liquid } from 'liquidjs'
 const app = express()
 const engine = new Liquid()
 
-const golfersUrl = 'https://fdnd-agency.directus.app/items/into_golf_golfers'
-const roundsUrl = 'https://fdnd-agency.directus.app/items/into_golf_rounds'
-const handicapHistoryUrl = 'https://fdnd-agency.directus.app/items/into_golf_handicap_history'
-const milestonesUrl = 'https://fdnd-agency.directus.app/items/into_golf_milestones'
-const monthlyRankingUrl = 'https://fdnd-agency.directus.app/items/into_golf_monthly_ranking'
+const API = 'https://fdnd-agency.directus.app/items'
+const roundsUrl = `${API}/into_golf_rounds`
+const handicapHistoryUrl = `${API}/into_golf_handicap_history`
+
+const handicapHistoryUrl = `${API}/into_golf_handicap_history`
+const milestonesUrl = `${API}/into_golf_milestones`
+const monthlyRankingUrl = `${API}/into_golf_monthly_ranking`
+
+app.use(express.static('public'))
+app.use(express.urlencoded({extended: true}))
 
 app.engine('liquid', engine.express())
 app.set('view engine', 'liquid')
