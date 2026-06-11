@@ -5,9 +5,8 @@ const app = express()
 const engine = new Liquid()
 
 const API = 'https://fdnd-agency.directus.app/items'
+const golfersUrl = `${API}/into_golf_golfers`
 const roundsUrl = `${API}/into_golf_rounds`
-const handicapHistoryUrl = `${API}/into_golf_handicap_history`
-
 const handicapHistoryUrl = `${API}/into_golf_handicap_history`
 const milestonesUrl = `${API}/into_golf_milestones`
 const monthlyRankingUrl = `${API}/into_golf_monthly_ranking`
@@ -41,17 +40,32 @@ app.get('/myscore', async function (request, response) {
   try {
     const params = new URLSearchParams()
 
+// golfers ophalen
     const golferResponse = await fetch(`${golfersUrl}?${params.toString()}`)
     const golferResponseJSON = await golferResponse.json()
     const allGolfers = golferResponseJSON.data ?? []
 
+
+// montly ranking ophalen
+    const monthlyRankingResponse = await fetch(`${monthlyRankingUrl}?${params.toString()}`)
+    const monthlyRankingResponseJSON = await monthlyRankingResponse.json()
+    const monthlyRankings = monthlyRankingResponseJSON.data ?? []
+    const currentRankingSet = monthlyRankings[0] ?? null
+    const rankings = currentRankingSet?.rankings ? JSON.parse(currentRankingSet.rankings) : []
+    const rankingMonthLabel = currentRankingSet?.month
+      ? new Intl.DateTimeFormat('nl-NL', { month: 'long' }).format(new Date(`${currentRankingSet.month}-01T00:00:00Z`))
+      : ''
+
+// console.log('Current Ranking Set:', currentRankingSet)
+    
     response.render('myscore.liquid', {
       golfers: allGolfers,
       totalGolfers: allGolfers.length,
-      roundsUrl,
-      handicapHistoryUrl,
-      milestonesUrl,
-      monthlyRankingUrl,
+    
+      rankings,
+      rankingCategory: currentRankingSet?.category ?? 'monthly-ranking',
+      rankingMonth: currentRankingSet?.month ?? '',
+      rankingMonthLabel
     })
   } catch (error) {
     console.error(error)

@@ -1,6 +1,27 @@
 {% include 'partials/head.liquid' %}
-<ul>
-  {% for golfer in golfers %}
-    <li>{{ golfer.name }}</li>
-  {% endfor %}
-</ul>
+<section class="ranking-card">
+  <article class="card-header">
+    <h3>Ranking lijst</h3>
+    <nav class="tabs">
+      <button class="active" type="button">{{ rankingCategory }}</button>
+      <button type="button">All time</button>
+    </nav>
+  </article>
+
+  <label class="month-label">{{ rankingMonthLabel }}</label>
+
+  <ul class="ranking-list">
+    {% for ranking in rankings %}
+      <li class="ranking-item{% if ranking.isMe %} active{% endif %}">
+        <div class="rank">{{ forloop.index }}</div>
+        <span class="avatar{% if ranking.isMe %} avatar-blue{% endif %}">{{ ranking.initials }}</span>
+        <span class="content">
+          <span class="name">{{ ranking.name }}</span>
+          <span class="meta">Since {{ ranking.since }}</span>
+        </span>
+        <span class="score{% if ranking.value < 0 %} negative{% else %} positive{% endif %}">{{ ranking.value }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+{% include 'partials/footer.liquid' %}
