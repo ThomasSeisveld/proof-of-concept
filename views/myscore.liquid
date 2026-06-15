@@ -1,5 +1,15 @@
 {% include 'partials/head.liquid' %}
-<section class="ranking-card">
+<section>
+  <article class="card-header">
+    <h3>recente rondes</h3>
+    <nav class="tabs">
+      <button class="active" type="button">{{ rankingCategory }}</button>
+      <button type="button">All time</button>
+    </nav>
+  </article>
+</section>
+
+<section>
   <article class="card-header">
     <h3>Ranking lijst</h3>
     <nav class="tabs">
@@ -12,7 +22,7 @@
 
   <ul class="ranking-list">
     {% for ranking in rankings %}
-      <li class="ranking-item{% if ranking.isMe %} active{% endif %}">
+      <li class="{% if ranking.isMe %} active{% endif %}">
         <div class="rank">{{ forloop.index }}</div>
         <span class="avatar{% if ranking.isMe %} avatar-blue{% endif %}">{{ ranking.initials }}</span>
         <span class="content">
