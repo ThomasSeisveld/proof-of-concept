@@ -1,7 +1,78 @@
 {% include 'partials/head.liquid' %}
+<main>
+<section class="rounds-section">
+    <header class="rounds-header">
+        <article>
+            <h3>Recente rondes</h3>
+            <span>{{ recentRounds.size }} rondes</span>
+        </article>
+
+        <button class="add-round">
+            + Ronde
+        </button>
+    </header>
+  
+    <ul class="rounds-list">
+      {% if recentRounds.size > 0 %}
+        {% for round in recentRounds %}
+          <li class="round-item" data-score-id="{{ round.id }}">
+            <article class="round-info">
+              <p class="date">{{ round.date }}</p>
+              <p class="course">
+                {% if round.course %}
+                  {{ round.course }}
+                {% elsif round.course_name %}
+                  {{ round.course_name }}
+                {% else %}
+                  Onbekend
+                {% endif %}
+              </p>
+            </article>
+
+            <section class="round-actions">
+              {% if round.badge == "QUAL" %}
+                <span class="badge">{{ round.badge }}</span>
+              {% else %}
+                  <span class="badge badge-negative">NOT</span>
+              {% endif %}
+              {% if round.hcp %}
+              <span class="hcp">
+                {% if round.hcp %}
+                  {{ round.hcp }}
+                {% else %}
+                  -
+                {% endif %}
+              </span>
+              {% endif %}
+              <span>
+               <form method="post" action="/score-verwijderen">
+                        <input type="hidden" name="score_id" value="{{ round.id }}">
+                        <button class="primary-button delete"><img src="assets/trash.svg" alt="verwijderen" width="20" height="20"></button>
+              </form>
+              </span>
+            </section>
+          </li>
+        {% endfor %}
+      {% else %}
+        <li class="no-rounds">Geen recente rondes</li>
+      {% endif %}
+    </ul>
+</section>
+
 <section>
-  <article class="card-header">
+  <article class="rounds-header">
+    <h3>recente rondes</h3>
+    <nav class="tabs">
+      <button class="active" type="button">{{ rankingCategory }}</button>
+      <button type="button">All time</button>
+    </nav>
+  </article>
+</section>
+
+<section class="ranking-section">
+  <article class="ranking-header">
     <h3>Ranking lijst</h3>
+    <span>{{ rankings.size }} Golfers</span>
     <nav class="tabs">
       <button class="active" type="button">{{ rankingCategory }}</button>
       <button type="button">All time</button>
@@ -13,7 +84,7 @@
   <ul class="ranking-list">
     {% for ranking in rankings %}
       <li class="{% if ranking.isMe %} active{% endif %}">
-        <div class="rank">{{ forloop.index }}</div>
+        <span class="rank">{{ forloop.index }}</span>
         <span class="avatar{% if ranking.isMe %} avatar-blue{% endif %}">{{ ranking.initials }}</span>
         <span class="content">
           <span class="name">{{ ranking.name }}</span>
@@ -24,4 +95,26 @@
     {% endfor %}
   </ul>
 </section>
+</main>
+
+<article id="notification" class="notification">
+  Ronde succesvol verwijderd!
+</article>
+
 {% include 'partials/footer.liquid' %}
+
+<style>
+  
+</style>
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('deleted') === 'true') {
+    const notification = document.getElementById('notification');
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+      notification.classList.remove('show');
+    }, 3000);
+  }
+</script>
