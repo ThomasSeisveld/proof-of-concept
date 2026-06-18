@@ -60,6 +60,7 @@ app.get("/", async function (request, response) {
 	const golfer = await fetch(baseUrl + golfers + "/1");
 	const allGolfers = await fetch(baseUrl + golfers + "?limit=20");
 	const scores = await fetch(baseUrl + rounds + "?filter[golfer_id][_eq]=1&sort=-date&limit=5",);
+	const handicapData = await fetch(baseUrl + handicapHistory + "?filter[golfer_id][_eq]=1&sort=-date&limit=12");
 
 	// ranking fetch 
 	const ranking = await fetch(baseUrl + monthlyRanking + "?filter[golfer_id][_eq]=1&sort=-month&limit=1",);
@@ -151,7 +152,8 @@ app.post("/score-verwijderen", async function (request, response) {
 		return;
 	}
 
-	response.redirect(303, "/?deleted=true");
+	response.redirect(303, "/");
+	// response.redirect(303, "/?deleted=true");
 });
 
 app.set("port", process.env.PORT || 8000);

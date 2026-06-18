@@ -1,5 +1,34 @@
 {% include 'partials/head.liquid' %}
 <main>
+    <section class="handicap-section">
+    <header class="handicap-header">
+       <h3>WHS HANDICAP</h3>
+    </header>
+
+    <article>
+        <span class="handicap-value">
+            {{ golfer.handicap | round: 1}}
+        </span>
+
+        <span class="handicap-change">
+            {{ golfer.improvement | round: 1}}
+        </span>
+    </article>
+
+    <p class="handicap-meta">
+        Was <strong>{{ golfer.previous_handicap | round: 1}}</strong>
+        op {{ golfer.previous_date | date: "%d %b %y" }} ·
+        low <strong>{{ golfer.low | round: 1}}</strong>
+    </p>
+</section>
+
+<section class="log-section">
+  <article class="log-header">
+    <span class="log-title">LOG</span>
+    <span class="log-subtitle">Recente rondes</span>
+  </article>
+</section>
+
 <section class="rounds-section">
     <header class="rounds-header">
         <article>
@@ -7,11 +36,11 @@
             <span>{{ recentRounds.size }} rondes</span>
         </article>
 
-        <button class="add-round">
+        <button popovertarget="add-score" class="add-round">
             + Ronde
         </button>
     </header>
-  
+     
     <ul class="rounds-list">
       {% if recentRounds.size > 0 %}
         {% for round in recentRounds %}
@@ -59,13 +88,10 @@
     </ul>
 </section>
 
-<section>
-  <article class="rounds-header">
-    <h3>recente rondes</h3>
-    <nav class="tabs">
-      <button class="active" type="button">{{ rankingCategory }}</button>
-      <button type="button">All time</button>
-    </nav>
+<section class="log-section">
+  <article class="log-header">
+    <span class="log-title">LOG</span>
+    <span class="log-subtitle">Ranking lijst</span>
   </article>
 </section>
 
@@ -96,23 +122,47 @@
   </ul>
 </section>
 </main>
+<form method="POST" action="/score-toevoegen" popover id="add-score">
+            <input type="hidden" name="golfer_id" value="{{ golfer.id }}">
+            <label>
+                Datum:
+                <input type="date" name="date" max="{{ 'today' | date: '%Y-%m-%d' }}" value="{{ 'today' | date: '%Y-%m-%d' }}">
+            </label>
+            <label>
+                Baan:
+                <input type="text" name="course">
+            </label>
+            <label>
+                Score
+                <input type="number" name="score">
+            </label>
+            <label>
+                <input type="checkbox" checked name="type" value="QUAL">
+                Telt mee voor handicap
+            </label>
+            <button class="primary-button">versturen</button>
+      </form>
 
 <article id="notification" class="notification">
-  Ronde succesvol verwijderd!
+  <span id="notification-message"></span>
 </article>
 
 {% include 'partials/footer.liquid' %}
 
-<style>
-  
-</style>
-
 <script>
   const urlParams = new URLSearchParams(window.location.search);
+  const notification = document.getElementById('notification');
+  const notificationMessage = document.getElementById('notification-message');
+  
   if (urlParams.get('deleted') === 'true') {
-    const notification = document.getElementById('notification');
+    notificationMessage.textContent = 'Ronde succesvol verwijderd!';
     notification.classList.add('show');
-    
+  } else if (urlParams.get('added') === 'true') {
+    notificationMessage.textContent = 'Ronde succesvol toegevoegd!';
+    notification.classList.add('show');
+  }
+  
+  if (notification.classList.contains('show')) {
     setTimeout(() => {
       notification.classList.remove('show');
     }, 3000);
