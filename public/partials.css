@@ -1,64 +1,17 @@
-        nav {
-            padding: 0.5rem 2rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background-color: rgb(255, 255, 255);
-            display: flex;
-            justify-content: center;
+header {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
 
-            ul {
-                list-style: none;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            li {
-                padding: 0.5rem 1rem;
-                border-radius: 4px;
-                transition: all 0.3s ease;
-                flex: 0 1 auto;
-
-                a {
-                    color: #000000;
-                    text-decoration: none;
-                }
-
-
-                .notification {
-                    box-sizing: border-box;
-
-                    position: absolute;
-                    width: 8px;
-                    height: 8px;
-                    right: -2px;
-                    top: -2px;
-
-                    background: #E8A92B;
-                    border: 1px solid #FFFFFF;
-                    border-radius: 4px;
-
-                    /* Inside auto layout */
-                    flex: none;
-                    order: 1;
-                    flex-grow: 0;
-                    z-index: 1;
-
-                }
-
-                a:hover {
-                    background-color: gray;
-                    color: #fff;
-                }
-
-                a.active {
-                    background-color: gray;
-                    color: #fff;
-                }
-            }
-        }
-@media (min-width: 30em) {
-    nav ul {
-        gap: 2rem;
+    h1 {
+        font-size: 15px;
     }
 }
-        
+
+@media (min-width: 25em) {
+    header h1 {
+        font-size: 20px;
+    }
+}
