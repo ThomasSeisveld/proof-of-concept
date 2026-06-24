@@ -66,6 +66,33 @@ Ook kan je de rondes verwijderen door op de prullenbak te klikken.
 
 <img width="310" height="505" alt="Image" src="https://github.com/user-attachments/assets/dc56bf53-ccb5-46ac-8d58-92b54804b838" />
 
+### HTML code popup
+```liquid
+       <button popovertarget="add-score" class="add-round">
+            + Ronde
+       </button>
+<form method="POST" action="/score-toevoegen" popover id="add-score">
+            <input type="hidden" name="golfer_id" value="{{ golfer.id }}">
+            <label>
+                Datum:
+                <input type="date" name="date" max="{{ 'today' | date: '%Y-%m-%d' }}" value="{{ 'today' | date: '%Y-%m-%d' }}">
+            </label>
+            <label>
+                Baan:
+                <input type="text" name="course">
+            </label>
+            <label>
+                Score
+                <input type="number" name="score">
+            </label>
+            <label>
+                <input type="checkbox" checked name="type" value="QUAL">
+                Telt mee voor handicap
+            </label>
+            <button class="primary-button">versturen</button>
+      </form>
+```
+
 ## Installatie
 <!-- Bij Instalatie staat hoe een andere developer aan jouw repo kan werken -->
 
